@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.wu.osuinfo.DetailActivity"
+    tools:showIn="@layout/activity_detail">
+
+    <TextView
+        android:id="@+id/crank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/rank"
+        android:layout_centerVertical="true"
+        android:text="CRank Here"
+        android:textAlignment="textEnd"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/user_name_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/user_name"
+        android:layout_alignBottom="@+id/user_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp"
+        android:text="Name:"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="31dp"
+        android:text="User's Name Here"
+        android:textAlignment="textEnd"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/play_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/play_count_hint"
+        android:layout_alignBottom="@+id/play_count_hint"
+        android:layout_alignEnd="@+id/user_name"
+        android:text="Play Count Here"
+        android:textAlignment="textEnd"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/rank_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/crank_hint"
+        android:layout_alignStart="@+id/pp_hint"
+        android:layout_marginBottom="14dp"
+        android:text="Global Rank :"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/pp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/play_count"
+        android:layout_alignTop="@+id/pp_hint"
+        android:text="PP Here"
+        android:textAlignment="textEnd"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/play_count_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/user_name_hint"
+        android:layout_below="@+id/user_name_hint"
+        android:layout_marginTop="18dp"
+        android:text="Play Count: "
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/rank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/pp"
+        android:layout_alignTop="@+id/rank_hint"
+        android:text="GRank Here"
+        android:textAlignment="textEnd"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/crank_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/rank_hint"
+        android:layout_centerVertical="true"
+        android:text="Country Rank :"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/pp_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/play_count_hint"
+        android:layout_below="@+id/play_count_hint"
+        android:layout_marginTop="16dp"
+        android:text="PP :"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/ss_count_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/crank_hint"
+        android:layout_below="@+id/crank"
+        android:layout_marginTop="16dp"
+        android:text="SS :"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/s_count_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/ss_count"
+        android:layout_alignBottom="@+id/ss_count"
+        android:layout_marginStart="54dp"
+        android:layout_toEndOf="@+id/user_name_hint"
+        android:text="S :"
+        android:textAlignment="textStart"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/a_count_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A :"
+        android:textSize="30sp"
+        android:layout_alignBaseline="@+id/s_count"
+        android:layout_alignBottom="@+id/s_count"
+        android:layout_toStartOf="@+id/a_count" />
+
+    <TextView
+        android:id="@+id/ss_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/ss_count_hint"
+        android:layout_alignBottom="@+id/ss_count_hint"
+        android:layout_toEndOf="@+id/ss_count_hint"
+        android:text="0"
+        android:textAlignment="textStart"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/s_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/s_count_hint"
+        android:layout_alignBottom="@+id/s_count_hint"
+        android:layout_toEndOf="@+id/s_count_hint"
+        android:text="0"
+        android:textAlignment="textStart"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/a_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textAlignment="textStart"
+        android:textSize="30sp"
+        android:layout_alignBaseline="@+id/a_count_hint"
+        android:layout_alignBottom="@+id/a_count_hint"
+        android:layout_alignEnd="@+id/crank" />
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="Back"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/ss_count" />
+
+    <Button
+        android:id="@+id/compare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Compare to..."
+        android:layout_alignBaseline="@+id/back"
+        android:layout_alignBottom="@+id/back"
+        android:layout_toEndOf="@+id/s_count_hint" />
+
+</RelativeLayout>
