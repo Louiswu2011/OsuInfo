@@ -22,11 +22,11 @@
         android:id="@+id/titledescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
         android:text="Info just one *click* away!"
-        android:textSize="18sp"
-        android:layout_below="@+id/title"
-        android:layout_centerHorizontal="true" />
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/user_name"
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="26dp"
         android:text="Search" />
 
     <ProgressBar
@@ -56,4 +56,13 @@
         android:layout_below="@+id/searchbtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="27dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="version The Ultimate Alpha Hotfix 0022" />
+
 </RelativeLayout>

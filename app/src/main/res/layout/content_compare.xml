@@ -56,40 +56,40 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="30dp"
+        android:layout_marginTop="43dp"
         android:text="10000pp @ 1st"
         android:textAlignment="textEnd"
-        android:textSize="20sp"
-        android:layout_marginTop="43dp"/>
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/compare_pp2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/compare_pp1"
+        android:layout_marginTop="355dp"
         android:text="9999pp @ 2nd"
         android:textAlignment="textEnd"
-        android:textSize="20sp"
-        android:layout_marginTop="355dp"/>
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/compare_playcount1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/compare_username1"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
         android:text="Has played 0 times."
-        android:textSize="25sp"
-        android:layout_below="@+id/compare_username1"
-        android:layout_marginLeft="50dp"/>
+        android:textSize="25sp"/>
 
     <TextView
         android:id="@+id/compare_playcount2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/compare_username2"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="20dp"
         android:text="Has played 0 times."
-        android:textSize="25sp"
-        android:layout_marginLeft="50dp"/>
+        android:textSize="25sp"/>
 
     <TextView
         android:id="@+id/compare_totalscore1"
@@ -130,5 +130,23 @@
         android:layout_marginTop="5dp"
         android:text="Got 0 SS, 0 S and 0 A."
         android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/compare_comment1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/compare_sssatime1"
+        android:layout_below="@+id/compare_sssatime1"
+        android:layout_marginTop="5dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/compare_comment2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/compare_sssatime2"
+        android:layout_below="@+id/compare_sssatime2"
+        android:layout_marginTop="5dp"
+        android:text="TextView" />
 
 </RelativeLayout>

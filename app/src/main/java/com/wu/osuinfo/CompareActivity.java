@@ -2,18 +2,10 @@ package com.wu.osuinfo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.util.Objects;
 
 public class CompareActivity extends AppCompatActivity {
 
@@ -26,6 +18,19 @@ public class CompareActivity extends AppCompatActivity {
 
         Intent getParsedPackage = getIntent();
         String[] receivedParsedPackage = getParsedPackage.getStringArrayExtra("compareValue");  // Remember to check MainActivity for the content of the String Array.
+
+        // initialize some comments
+        final String SSRANKER = " gets more SS than ";
+        final String SSRANKER_LOWER = " gets less SS than ";
+        final String SSRANKER_SAME = " gets the same amount of SS ";
+        final String HIGHRANKER = " ranks higher than ";
+        final String HIGHRANKER_LOWER = " ranks lower than ";
+        final String EFFICIENCY = " more efficient than ";
+        final String EFFICIENCY_LOWER = " less efficient than ";
+
+        // some index
+        Float player1efficiency = 0.0f;
+        Float player2efficiency = 0.0f;
 
         // initialize all the variables...
         String re_username1 = receivedParsedPackage[0];
@@ -59,6 +64,8 @@ public class CompareActivity extends AppCompatActivity {
         TextView totalscore2 = (TextView)findViewById(R.id.compare_totalscore2);
         TextView sssacount1 = (TextView)findViewById(R.id.compare_sssatime1);
         TextView sssacount2 = (TextView)findViewById(R.id.compare_sssatime2);
+        TextView comment1 = (TextView)findViewById(R.id.compare_comment1);
+        TextView comment2 = (TextView)findViewById(R.id.compare_comment2);
 
         setTitle(re_username1 + " vs " + re_username2);
 
@@ -96,6 +103,99 @@ public class CompareActivity extends AppCompatActivity {
         totalscore2.setText("Gained " + re_totalscore2 + " points.");
         sssacount1.setText("Got " + re_ss_count1 + " SS, " + re_s_count1 + " S and " + re_a_count1 + " A.");
         sssacount2.setText("Got " + re_ss_count2 + " SS, " + re_s_count2 + " S and " + re_a_count2 + " A.");
+
+        // calculate index
+        player1efficiency = Float.parseFloat(re_totalscore1) / Float.parseFloat(re_playcount1);
+        player2efficiency = Float.parseFloat(re_totalscore2) / Float.parseFloat(re_playcount2);
+        Log.i("Calculations", player1efficiency.toString() + " vs " + player2efficiency.toString());
+
+        // SECTION START
+        // construct comments
+        // Step 1 : look for rankings
+        String comment_player1 = re_username1;
+        String comment_player2 = re_username2;
+        int player1step1 = 0, player1step2 = 0, player1step3 = 0;  // 1 to win the step, 0 to lose the step
+        int player2step1 = 0, player2step2 = 0, player2step3 = 0;  // gets "and" when win, "but" when lose
+
+        if (Integer.parseInt(re_grank1) < Integer.parseInt(re_grank2)){
+            comment_player1 += (HIGHRANKER + re_username2 + " ");
+            player1step1 = 1;
+            comment_player2 += (HIGHRANKER_LOWER + re_username2 + " ");
+            player2step1 = 0;
+
+        } else {
+            comment_player2 += (HIGHRANKER + re_username1 + " ");
+            player1step1 = 0;
+            comment_player1 += (HIGHRANKER_LOWER + re_username2 + " ");
+            player2step1 = 1;
+        }
+
+        // Step 2 : look for ss count
+        if (Integer.parseInt(re_ss_count1) > Integer.parseInt(re_ss_count2)){
+            if (player1step1 == 1){
+                comment_player1 += ("and" + SSRANKER + re_username2 + " ");
+                player1step2 = 1; // that said player2step1 must be 0, not need to use if again
+                comment_player2 += ("and" + SSRANKER_LOWER + re_username1 + " ");
+                player2step2 = 0;
+            } else {
+                comment_player1 += ("but" + SSRANKER + re_username2 + " ");
+                player1step2 = 1; // that said player2step1 must be 1, not need to use if again
+                comment_player2 += ("but" + SSRANKER_LOWER + re_username1 + " ");
+                player2step2 = 0;
+            }
+        } else if (Integer.parseInt(re_ss_count1) == Integer.parseInt(re_ss_count2)){
+            // both gets win
+            player1step2 = 1;
+            player2step2 = 1;
+            comment_player1 += ("and" + SSRANKER_SAME);
+            comment_player2 += ("and" + SSRANKER_SAME);
+        } else {
+            if (player2step1 == 1){
+                comment_player2 += ("and" + SSRANKER + re_username1 + " ");
+                player1step2 = 1; // that said player1step1 must be 0, not need to use if again
+                comment_player1 += ("and" + SSRANKER_LOWER + re_username2 + " ");
+                player2step2 = 0;
+            } else {
+                comment_player2 += ("but" + SSRANKER + re_username1 + " ");
+                player1step2 = 1; // that said player1step1 must be 1, not need to use if again
+                comment_player1 += ("but" + SSRANKER_LOWER + re_username2 + " ");
+                player2step2 = 0;
+            }
+        }
+
+        // Step 3 : look for efficiency e.g. the ratio between TotalScore and PlayCount (that's bullsh*t)
+        if (player1efficiency > player2efficiency){ // and there can't be equal situation so no need for elseif
+            if (player1step2 == 1){
+                comment_player1 += ("and" + EFFICIENCY + re_username2 + " ");
+                player1step3 = 1;
+                comment_player2 += ("and" + EFFICIENCY_LOWER + re_username1 + " ");
+                player2step3 = 0;
+            } else {
+                comment_player1 += ("but" + EFFICIENCY + re_username2 + " ");
+                player1step3 = 1;
+                comment_player2 += ("but" + EFFICIENCY_LOWER + re_username1 + " ");
+                player2step3 = 0;
+            }
+        } else {
+            if (player2step2 == 1){
+                comment_player2 += ("and" + EFFICIENCY + re_username1 + " ");
+                player2step3 = 1;
+                comment_player1 += ("and" + EFFICIENCY_LOWER + re_username2 + " ");
+                player1step3 = 0;
+            } else {
+                comment_player2 += ("but" + EFFICIENCY + re_username1 + " ");
+                player2step3 = 1;
+                comment_player1 += ("but" + EFFICIENCY_LOWER + re_username2 + " ");
+                player1step3 = 0;
+            }
+        }
+
+        // Final step (Whooo..Tiring Coding) : show result
+        comment1.setText(comment_player1);
+        comment2.setText(comment_player2);
+
+        //SECTION CLOSED
+
     }
 
 }
