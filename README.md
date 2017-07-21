@@ -1,5 +1,6 @@
 # OsuInfo
 An under-developing android app that gets user info of osu! and many more features.
+website: https://louiswu148.wixsite.com/osuinfo
 
 TODO:
 
