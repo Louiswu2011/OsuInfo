@@ -120,7 +120,7 @@ public class CompareActivity extends AppCompatActivity {
         if (Integer.parseInt(re_grank1) < Integer.parseInt(re_grank2)){
             comment_player1 += (HIGHRANKER + re_username2 + " ");
             player1step1 = 1;
-            comment_player2 += (HIGHRANKER_LOWER + re_username2 + " ");
+            comment_player2 += (HIGHRANKER_LOWER + re_username1 + " ");
             player2step1 = 0;
 
         } else {
@@ -152,18 +152,18 @@ public class CompareActivity extends AppCompatActivity {
         } else {
             if (player2step1 == 1){
                 comment_player2 += ("and" + SSRANKER + re_username1 + " ");
-                player1step2 = 1; // that said player1step1 must be 0, not need to use if again
+                player2step2 = 1; // that said player1step2 must be 0, not need to use if again
                 comment_player1 += ("and" + SSRANKER_LOWER + re_username2 + " ");
-                player2step2 = 0;
+                player1step2 = 0;
             } else {
                 comment_player2 += ("but" + SSRANKER + re_username1 + " ");
-                player1step2 = 1; // that said player1step1 must be 1, not need to use if again
+                player2step2 = 1; // that said player1step2 must be 1, not need to use if again
                 comment_player1 += ("but" + SSRANKER_LOWER + re_username2 + " ");
-                player2step2 = 0;
+                player1step2 = 0;
             }
         }
 
-        // Step 3 : look for efficiency e.g. the ratio between TotalScore and PlayCount (that's bullsh*t)
+        // Step 3 : look for efficiency i.e. the ratio between TotalScore and PlayCount (that's bullsh*t)
         if (player1efficiency > player2efficiency){ // and there can't be equal situation so no need for elseif
             if (player1step2 == 1){
                 comment_player1 += ("and" + EFFICIENCY + re_username2 + " ");

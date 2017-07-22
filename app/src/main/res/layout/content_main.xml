@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.wu.osuinfo.MainActivity"
     tools:showIn="@layout/app_bar_main">
@@ -12,9 +14,8 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="142dp"
+        android:layout_marginTop="130dp"
         android:text="osu!info"
         android:textSize="30sp" />
 
@@ -28,24 +29,34 @@
         android:text="Info just one *click* away!"
         android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/user_name"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/user_name_layout"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/titledescription"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp"
-        android:ems="10"
-        android:hint="Input Username or UserID"
-        android:inputType="textPersonName" />
+        android:layout_marginLeft="85dp"
+        android:layout_marginTop="250dp">
+
+        <EditText
+            android:id="@+id/user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/titledescription"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:ems="10"
+            android:hint="Input Username or UserID"
+            android:inputType="textPersonName" />
+    </android.support.design.widget.TextInputLayout>
+
 
     <Button
         android:id="@+id/searchbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/user_name"
+        android:layout_below="@+id/user_name_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="36dp"
         android:text="Search" />
 
     <ProgressBar
@@ -55,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/searchbtn"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="27dp" />
+        android:layout_marginTop="26dp" />
 
     <TextView
         android:id="@+id/textView2"
@@ -63,6 +74,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:text="version The Ultimate Alpha Hotfix 0022" />
+        android:text="version The Ultimate Alpha Build 0023" />
+
+
 
 </RelativeLayout>

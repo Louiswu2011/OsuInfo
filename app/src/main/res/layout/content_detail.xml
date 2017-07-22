@@ -137,11 +137,11 @@
         android:id="@+id/a_count_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A :"
-        android:textSize="30sp"
         android:layout_alignBaseline="@+id/s_count"
         android:layout_alignBottom="@+id/s_count"
-        android:layout_toStartOf="@+id/a_count" />
+        android:layout_toStartOf="@+id/a_count"
+        android:text="A :"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/ss_count"
@@ -169,29 +169,40 @@
         android:id="@+id/a_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:textAlignment="textStart"
-        android:textSize="30sp"
         android:layout_alignBaseline="@+id/a_count_hint"
         android:layout_alignBottom="@+id/a_count_hint"
-        android:layout_alignEnd="@+id/crank" />
+        android:layout_alignEnd="@+id/crank"
+        android:text="0"
+        android:textAlignment="textStart"
+        android:textSize="30sp" />
 
     <Button
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:text="Back"
         android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/ss_count" />
+        android:layout_marginBottom="38dp"
+        android:layout_marginStart="11dp"
+        android:layout_toEndOf="@+id/button"
+        android:text="Back" />
 
     <Button
         android:id="@+id/compare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Compare to..."
         android:layout_alignBaseline="@+id/back"
         android:layout_alignBottom="@+id/back"
-        android:layout_toEndOf="@+id/s_count_hint" />
+        android:layout_alignEnd="@+id/a_count"
+        android:text="Compare to..." />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/back"
+        android:layout_alignBottom="@+id/back"
+        android:layout_alignStart="@+id/ss_count_hint"
+        android:layout_marginStart="13dp"
+        android:text="Subscribe..." />
 
 </RelativeLayout>

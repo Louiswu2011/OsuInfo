@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="265dp"
+    android:background="?android:attr/colorBackground"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        app:cardBackgroundColor="@color/cardview_dark_background"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="2dp"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/trend_bg"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_alignStart="@+id/trend_user_avatar"
+                android:layout_alignTop="@+id/trend_user_avatar"
+                android:layout_marginRight="5dp"
+                app:srcCompat="@color/cardview_shadow_start_color" />
+
+            <ImageView
+                android:id="@+id/trend_user_avatar"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:adjustViewBounds="true"
+                android:background="@color/cardview_dark_background"
+                android:elevation="8dp"
+                app:srcCompat="@drawable/side_nav_bar" />
+
+            <TextView
+                android:id="@+id/trend_username"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignEnd="@+id/trend_totalscorechange"
+                android:layout_alignStart="@+id/trend_bg"
+                android:layout_marginBottom="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="120dp"
+                android:elevation="8dp"
+                android:text="Cookiezi"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"
+                android:textSize="40sp" />
+
+            <TextView
+                android:id="@+id/trend_user_rank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/trend_playerdetail"
+                android:layout_alignEnd="@+id/trend_totalscorechange"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:elevation="8dp"
+                android:text="10000pp @ 1st"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/trend_pre_totalscore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="80dp"
+                android:layout_toStartOf="@+id/trend_totalscorechange"
+                android:elevation="8dp"
+                android:text="160571088386 points"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/trend_totalscorechange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/trend_pre_totalscore"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:elevation="8dp"
+                android:text="+999738284"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/trend_pre_playcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="40dp"
+                android:layout_toStartOf="@+id/trend_playcount_change"
+                android:elevation="8dp"
+                android:text="18437 times"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/trend_playcount_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/trend_pre_playcount"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:elevation="8dp"
+                android:text="+143"
+                android:textColor="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/trend_playerdetail"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:text="Detail" />
+
+            <Button
+                android:id="@+id/trend_unsub"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/trend_playerdetail"
+                android:layout_toStartOf="@+id/trend_playerdetail"
+                android:text="Unsubscribe" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

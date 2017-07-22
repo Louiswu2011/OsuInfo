@@ -28,7 +28,8 @@
         <activity
             android:name=".CompareActivity"
             android:label="@string/title_activity_compare"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".TrendActivity"></activity>
     </application>
 
 </manifest>
