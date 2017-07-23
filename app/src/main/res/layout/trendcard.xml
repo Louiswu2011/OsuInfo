@@ -28,9 +28,10 @@
                 android:id="@+id/trend_bg"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_alignStart="@+id/trend_user_avatar"
-                android:layout_alignTop="@+id/trend_user_avatar"
+                android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:scaleType="centerCrop"
                 app:srcCompat="@color/cardview_shadow_start_color" />
 
             <ImageView
@@ -40,9 +41,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="77dp"
                 android:adjustViewBounds="true"
-                android:background="@color/cardview_dark_background"
+                android:background="@drawable/frame"
                 android:elevation="8dp"
                 app:srcCompat="@drawable/side_nav_bar" />
 
@@ -73,7 +74,7 @@
                 android:elevation="8dp"
                 android:text="10000pp @ 1st"
                 android:textAlignment="textEnd"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorPrimary"
                 android:textSize="20sp" />
 
             <TextView
@@ -81,11 +82,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="55dp"
                 android:layout_toStartOf="@+id/trend_totalscorechange"
                 android:elevation="8dp"
                 android:text="160571088386 points"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/trend_totalscorechange"
@@ -97,18 +98,18 @@
                 android:layout_marginRight="10dp"
                 android:elevation="8dp"
                 android:text="+999738284"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/trend_pre_playcount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="24dp"
                 android:layout_toStartOf="@+id/trend_playcount_change"
                 android:elevation="8dp"
                 android:text="18437 times"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/trend_playcount_change"
@@ -120,7 +121,7 @@
                 android:layout_marginRight="10dp"
                 android:elevation="8dp"
                 android:text="+143"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorPrimary" />
 
             <Button
                 android:id="@+id/trend_playerdetail"
@@ -129,7 +130,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:text="Detail" />
+                android:text="Detail"
+                android:textColor="@color/colorPrimary" />
 
             <Button
                 android:id="@+id/trend_unsub"
@@ -138,7 +140,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/trend_playerdetail"
                 android:layout_toStartOf="@+id/trend_playerdetail"
-                android:text="Unsubscribe" />
+                android:text="Unsubscribe"
+                android:textColor="@color/colorPrimary" />
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>

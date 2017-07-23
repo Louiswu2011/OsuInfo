@@ -21,10 +21,11 @@ public class Trend {
     private Integer avatarcolor;
     private Button userdetail;
     private Button unsub;
+    private Drawable userblurredavatar;
 
     public Trend() {}
 
-    public Trend(String username, String userpp, String userprepp, String userrank, String userprerank, String usertotalscore, String userpretotalscore, String userplaycount, String userpreplaycount, Drawable useravatar){
+    public Trend(String username, String userpp, String userprepp, String userrank, String userprerank, String usertotalscore, String userpretotalscore, String userplaycount, String userpreplaycount, Drawable useravatar, Drawable userblurredavatar){
         this.username = username;
         this.userpp = userpp;
         this.userprepp = userprepp;
@@ -35,6 +36,7 @@ public class Trend {
         this.userplaycount = userplaycount;
         this.userpreplaycount = userpreplaycount;
         this.useravatar = useravatar;
+        this.userblurredavatar = userblurredavatar;
     }
 
     public String getUsername(){
@@ -135,6 +137,10 @@ public class Trend {
 
     public Integer getAvatarcolor(){
         return this.avatarcolor;
+    }
+
+    public Drawable getUserblurredavatar(){
+        return this.userblurredavatar;
     }
 
 

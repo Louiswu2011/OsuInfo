@@ -1,18 +1,36 @@
 package com.wu.osuinfo;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -78,6 +96,8 @@ public class TrendFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_trend, container, false);
 
+        String[] subList = {};
+
         recyclerView = (RecyclerView)v.findViewById(R.id.recyclerView);
 
         trendList = new ArrayList<>();
@@ -88,8 +108,14 @@ public class TrendFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trendAdapter);
 
+        // Now fetch the subscription list
+        SharedPreferences slist = v.getContext().getSharedPreferences("subList", Context.MODE_PRIVATE);
+        String listString = slist.getString("listString", "124493|4787150|2558286");  // here we got Cookiezi|Vaxei|Rafis XD
+
+        subList = listString.split("\\|");
+
         try {
-            prepareTrends();
+            prepareTrends(subList);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,14 +125,29 @@ public class TrendFragment extends Fragment {
 
 
 
-    private void prepareTrends() throws Exception {
+    private void prepareTrends(String[] subscription) throws Exception {
         // Debug only.
-        Trend cookiezi = new Trend("cookiezi", "13928", "13827", "1", "2", "160571088386", "160563443901", "18437", "18436", getContext().getDrawable(R.mipmap.ic_cookiezi));
-        Trend vaxei = new Trend("Vaxei", "13407", "13424", "2", "3", "166023938049", "166020091321", "106000", "105890", getContext().getDrawable(R.mipmap.ic_vaxei));
-        Trend rafis = new Trend("Rafis", "13415", "13415", "3", "4", "390291064248", "390230188212", "216468", "216453", getContext().getDrawable(R.mipmap.ic_rafis));
-        trendList.add(cookiezi);
-        trendList.add(vaxei);
-        trendList.add(rafis);
+        // Trend cookiezi = new Trend("cookiezi", "13928", "13827", "1", "2", "160571088386", "160563443901", "18437", "18436", getContext().getDrawable(R.mipmap.ic_cookiezi));
+        // Trend vaxei = new Trend("Vaxei", "13407", "13424", "2", "3", "166023938049", "166020091321", "106000", "105890", getContext().getDrawable(R.mipmap.ic_vaxei));
+        // Trend rafis = new Trend("Rafis", "13415", "13415", "3", "4", "390291064248", "390230188212", "216468", "216453", getContext().getDrawable(R.mipmap.ic_rafis));
+        // trendList.add(cookiezi);
+        // trendList.add(vaxei);
+        // trendList.add(rafis);
+
+        // need to get: name, pp, rank, totalscore, playcount, avatar.
+        int listLength = subscription.length;
+        int i;
+        for (i = 0; i < listLength; i++){
+            Log.i("Arranging Cards Beta", "i:" + Integer.toString(i) + " listLength:" + Integer.toString(listLength));
+            String subUser = subscription[i];
+            Log.i("Arranging Cards Beta", "Now arranging: " + subUser);
+            AsyncTaskTool.execute(new getCardInfoTask(), subUser);
+        }
+    }
+
+    public void createTrend(String uName, String uPP, String uRank, String uTotalScore, String uPlayCount, Drawable uAvatar, Drawable uAvatarBlurred){
+        Trend subUser = new Trend(uName, uPP, uPP, uRank, uRank, uTotalScore, uTotalScore, uPlayCount, uPlayCount, uAvatar, uAvatarBlurred);
+        trendList.add(subUser);
         trendAdapter.notifyDataSetChanged();
     }
 
@@ -149,5 +190,157 @@ public class TrendFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    public class getCardInfoTask extends AsyncTask<String, Integer, Object[]>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Object[] doInBackground(String... params) {
+            if(!Objects.equals(params[0], "")){
+                Log.i("", "Start Fetching JSON...");
+                String token = getResources().getString(R.string.apikey);
+                String username = params[0];
+                String url = "https://osu.ppy.sh/api/get_user";
+                String param = "k=" + token + "&u=" + username;
+                String json = "";
+                Drawable avatar = null;
+                BufferedReader in = null;
+                try {
+                    String urlNameString = url + "?" + param;
+                    URL realUrl = new URL(urlNameString);
+                    URLConnection connection = realUrl.openConnection();
+                    connection.setRequestProperty("accept", "*/*");
+                    connection.setRequestProperty("connection", "Keep-Alive");
+                    connection.setRequestProperty("user-agent",
+                            "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+                    connection.connect();
+                    Map<String, List<String>> map = connection.getHeaderFields();
+                    for (String key : map.keySet()) {
+                        System.out.println(key + "--->" + map.get(key));
+                    }
+                    in = new BufferedReader(new InputStreamReader(
+                            connection.getInputStream()));
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        json += line;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error sending URL Request!" + e);
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (in != null) {
+                            in.close();
+                        }
+                    } catch (Exception e2) {
+                        e2.printStackTrace();
+                    }
+                }
+                json = json + "|" + params[0];
+                Object[] p = {null, null, null};
+                InputStream is = null;
+                try {
+                    is = (InputStream) new URL("https://a.ppy.sh/" + params[0]).getContent();
+                    avatar = Drawable.createFromStream(is, "src name");
+                    FastBlur fb = new FastBlur();
+                    Bitmap b1 = fb.fastblur((((BitmapDrawable)avatar).getBitmap()), 1f ,30);
+                    p[0] = json;
+                    p[1] = avatar;
+                    p[2] = new BitmapDrawable(b1);
+                    return p;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    p[0] = json;
+                    p[1] = getResources().getDrawable(R.mipmap.no_avatar);
+                    FastBlur fb = new FastBlur();
+                    Bitmap b2 = fb.fastblur((((BitmapDrawable)p[1]).getBitmap()), 1f ,30);
+                    p[2] = new BitmapDrawable(b2);
+                    return p;
+                }
+
+
+
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object[] d) {
+            super.onPostExecute(d);
+            if(Objects.equals(d, null)){
+                return;
+            } else {
+                // All Log.i/e are Debug only and should be quoted in further implement.
+                // Log.i("", s);
+                String s = (String)d[0];
+                String resultpackage[] = s.split("\\|");
+                String json = resultpackage[0];
+                // String username = resultpackage[1];
+                Drawable re_avatar = (Drawable)d[1];
+                Drawable re_avatar_blurred = (Drawable)d[2];
+
+                final Intent gotoDetail = new Intent(getContext(), DetailActivity.class);
+                if (!Objects.equals(json, "[]")) {
+
+                    Log.i("", "Get JSON Data: " + json + "And editing...");
+                    // json = "{\"userinfo\":" + json + "}";
+                    // Log.i("Manipulation", "After editing: " + json);
+                    // Can add more strings.
+                    String re_username = "";
+                    String re_playcount = "";
+                    String re_pp = "";
+                    String re_grank = "";
+                    String re_crank = "";
+                    // String re_countss = "";
+                    // String re_counts = "";
+                    // String re_counta = "";
+                    String re_totalscore = "";
+                    // String re_userid = "";
+                    // String re_usercountry = "";
+
+                    try {
+                        JSONArray JArray = new JSONArray(json);
+                        for (int i = 0; i < JArray.length(); i++) {
+                            JSONObject jObject = JArray.optJSONObject(i);
+                            re_username = jObject.optString("username");
+                            re_playcount = jObject.optString("playcount");
+                            re_pp = jObject.optString("pp_raw");
+                            re_grank = jObject.optString("pp_rank");
+                            re_crank = jObject.optString("pp_country_rank");
+                            // re_countss = jObject.optString("count_rank_ss");
+                            // re_counts = jObject.optString("count_rank_s");
+                            // re_counta = jObject.optString("count_rank_a");
+                            re_totalscore = jObject.optString("total_score");
+                            // re_userid = jObject.optString("user_id");
+                            // re_usercountry = jObject.optString("country");
+                        }
+                        Log.i("", "Received info:");
+                        Log.i("JSONData", re_username + re_playcount + re_pp + re_grank + re_crank);
+                        // String[] parsedPackage = {re_username, re_pp, re_playcount, re_grank, re_crank, re_countss, re_counts, re_counta, re_totalscore, re_userid,re_usercountry};
+
+                        // Initialize Cards
+                        createTrend(re_username, re_pp, re_grank, re_totalscore, re_playcount, re_avatar, re_avatar_blurred);
+
+                    } catch (Exception e) {
+                        Log.e("JSONParsingError", "Something went wrong parsing JSON.");
+                        Log.e("JSONParsingError", e.getMessage());
+                    }
+
+
+                } else {
+                    // Log.e("", "No user found!");
+                    Exception e = new Exception("Player Not Found");
+                }
+            }
+        }
+
+    }
+
 
 }
+
+
