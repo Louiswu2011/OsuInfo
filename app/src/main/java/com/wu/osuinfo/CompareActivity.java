@@ -41,16 +41,16 @@ public class CompareActivity extends AppCompatActivity {
         String re_ss_count1 = receivedParsedPackage[5];
         String re_s_count1 = receivedParsedPackage[6];
         String re_a_count1 = receivedParsedPackage[7];
-        String re_username2 = receivedParsedPackage[9];
+        String re_username2 = receivedParsedPackage[10];
         String re_totalscore1 = receivedParsedPackage[8];
-        String re_pp2 = receivedParsedPackage[10];
-        String re_playcount2 = receivedParsedPackage[11];
-        String re_grank2 = receivedParsedPackage[12];
-        String re_crank2 = receivedParsedPackage[13];
-        String re_ss_count2 = receivedParsedPackage[14];
-        String re_s_count2 = receivedParsedPackage[15];
-        String re_a_count2 = receivedParsedPackage[16];
-        String re_totalscore2 = receivedParsedPackage[17];
+        String re_pp2 = receivedParsedPackage[11];
+        String re_playcount2 = receivedParsedPackage[12];
+        String re_grank2 = receivedParsedPackage[13];
+        String re_crank2 = receivedParsedPackage[14];
+        String re_ss_count2 = receivedParsedPackage[15];
+        String re_s_count2 = receivedParsedPackage[16];
+        String re_a_count2 = receivedParsedPackage[17];
+        String re_totalscore2 = receivedParsedPackage[18];
 
         // Log.i("Received Stuff", receivedParsedPackage.toString());
 

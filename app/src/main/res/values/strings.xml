@@ -8,4 +8,7 @@
     <string name="title_activity_detail">User Detail</string>
     <string name="title_activity_compare">vs</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

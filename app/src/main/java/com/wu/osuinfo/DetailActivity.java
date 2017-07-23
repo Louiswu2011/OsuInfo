@@ -1,8 +1,15 @@
 package com.wu.osuinfo;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,20 +18,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -55,17 +70,21 @@ public class DetailActivity extends AppCompatActivity {
 
         TextView username = (TextView)findViewById(R.id.user_name);
         TextView pp = (TextView)findViewById(R.id.pp);
-        TextView playcount = (TextView)findViewById(R.id.play_count);
-        TextView grank = (TextView)findViewById(R.id.rank);
+        TextView playcount = (TextView)findViewById(R.id.detail_playcount);
+        // TextView grank = (TextView)findViewById(R.id.rank);
         TextView crank = (TextView)findViewById(R.id.crank);
         TextView sscount = (TextView)findViewById(R.id.ss_count);
         TextView scount = (TextView)findViewById(R.id.s_count);
         TextView acount = (TextView)findViewById(R.id.a_count);
+        TextView country = (TextView)findViewById(R.id.user_country);
 
-        Button backButton = (Button)findViewById(R.id.back);
-        Button compareButton = (Button)findViewById(R.id.compare);
+        // final Button backButton = (Button)findViewById(R.id.back);
+        final Button compareButton = (Button)findViewById(R.id.compare);
 
-        String re_username = receivedParsedPackage[0];
+        final ImageView avatarContainer = (ImageView)findViewById(R.id.user_avatar);
+        final ImageView blurredBackground = (ImageView)findViewById(R.id.user_avatar_blurred);
+
+        final String re_username = receivedParsedPackage[0];
         String re_pp = receivedParsedPackage[1];
         String re_playcount = receivedParsedPackage[2];
         String re_grank = receivedParsedPackage[3];
@@ -73,22 +92,68 @@ public class DetailActivity extends AppCompatActivity {
         String re_ss_count = receivedParsedPackage[5];
         String re_s_count = receivedParsedPackage[6];
         String re_a_count = receivedParsedPackage[7];
+        String re_userid = receivedParsedPackage[9];
+        String re_usercountry = receivedParsedPackage[10];
+
+        String re_crankt = "";
+
+        Locale locale = new Locale("en", re_usercountry);
+
+        Drawable avatar = null;
+
+        Bitmap avatarBitmap = null;
+        Bitmap avatarBlurredBitmap = null;
+
+        FastBlur fb = new FastBlur();
+
+        Float re_pp_number = Float.parseFloat(re_pp);
+        Integer re_pp_number_int = re_pp_number.intValue();
+        re_pp = re_pp_number_int.toString() + "pp";
+
+        switch (re_grank){
+            case "1":
+                re_pp += " @ 1st";
+                break;
+            case "2":
+                re_pp += " @ 2nd";
+                break;
+            case "3":
+                re_pp += " @ 3rd";
+                break;
+            default:
+                re_pp += " @ " + re_grank + "th";
+        }
+
+        country.setText("from " + locale.getDisplayCountry());
+
+        re_crankt = "Ranked";
+        switch (re_crank){
+            case "1":
+                re_crankt += " 1st";
+                break;
+            case "2":
+                re_crankt += " 2nd";
+                break;
+            case "3":
+                re_crankt += " 3rd";
+                break;
+            default:
+                re_crankt += " " + re_crank + "th";
+        }
+        re_crankt += " in ";
+        re_crankt += locale.getDisplayCountry();
+
+        re_playcount = "Played " + re_playcount + " times.";
 
         username.setText(re_username);
         pp.setText(re_pp);
         playcount.setText(re_playcount);
-        grank.setText(re_grank);
-        crank.setText(re_crank);
+        // grank.setText(re_grank);
+        crank.setText(re_crankt);
         sscount.setText(re_ss_count);
         scount.setText(re_s_count);
         acount.setText(re_a_count);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         compareButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +184,144 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
+        avatarContainer.setLongClickable(true);
+        avatarContainer.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final AlertDialog.Builder saveDialog = new AlertDialog.Builder(DetailActivity.this);
+                saveDialog.setTitle("Save Avatar?")
+                          .setMessage("Do you want to save " + re_username + "'s avatar to your phone?")
+                          .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                              @Override
+                              public void onClick(DialogInterface dialog, int which) {
+                                  dialog.dismiss();
+                              }
+                          })
+                          .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                              @Override
+                              public void onClick(DialogInterface dialog, int which) {
+                                  // Do the saving stuff async
+                                  saveAvatarToLocal saveTask = new saveAvatarToLocal(DetailActivity.this);
+
+                                  avatarContainer.buildDrawingCache();
+                                  Bitmap save = avatarContainer.getDrawingCache();
+
+                                  saveTaskParams saveParams = new saveTaskParams(save, re_username);
+                                  saveTask.execute(saveParams);
+                              }
+                          })
+                          .setCancelable(false)
+                          .show();
+                return true;
+            }
+        });
+
+        getUserAvatarFromUrl getUserAvatarFromUrl = new getUserAvatarFromUrl();
+        getUserAvatarFromUrl.execute(re_userid);
+
+    }
+
+    private static class saveTaskParams {
+        Bitmap bitmap;
+        String username;
+
+        saveTaskParams(Bitmap b, String s) {
+            this.bitmap = b;
+            this.username = s;
+        }
+    }
+
+    public class saveAvatarToLocal extends AsyncTask<saveTaskParams, Integer, String>{
+
+        private Context mContext;
+
+        public saveAvatarToLocal(Context context){
+            mContext = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(mContext, "Saving avatar...", Toast.LENGTH_SHORT);
+        }
+
+        @Override
+        protected String doInBackground(saveTaskParams... params) {
+            OutputStream fOut = null;
+            Uri outputFileUri;
+            String fullDir = "";
+            try {
+                File root = new File(Environment.getExternalStorageDirectory()
+                        + File.separator + "osuAvatars" + File.separator);
+                root.mkdirs();
+                File sdImageMainDirectory = new File(root, params[0].username + ".jpg");
+                outputFileUri = Uri.fromFile(sdImageMainDirectory);
+                fOut = new FileOutputStream(sdImageMainDirectory);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                params[0].bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                fOut.flush();
+                fOut.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            fullDir = Environment.getExternalStorageDirectory()
+                    + File.separator + "osuAvatars" + File.separator + params[0].username + ".jpg";
+            return fullDir;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Toast.makeText(this.mContext, "Avatar has saved to \"" + s + "\"", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public class getUserAvatarFromUrl extends AsyncTask<String, Integer, Drawable[]> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Drawable[] doInBackground(String... params) {
+            try {
+                Drawable[] ds = {null, null};
+
+                InputStream is = (InputStream) new URL("https://a.ppy.sh/" + params[0]).getContent();
+                Drawable d = Drawable.createFromStream(is, "src name");
+                FastBlur fb = new FastBlur();
+                Bitmap b = fb.fastblur((((BitmapDrawable)d).getBitmap()), 1f ,30);
+                BitmapDrawable bitmapDrawable = new BitmapDrawable(b);
+                Drawable bd = bitmapDrawable;
+                ds[0] = d;
+                ds[1] = bd;
+                return ds;
+            } catch (IOException e) {
+                Drawable[] ds = {null, null};
+                e.printStackTrace();
+                return ds;
+            }
+        }
+        @Override
+        protected void onPostExecute(Drawable[] ds) {
+            super.onPostExecute(ds);
+
+            final ImageView avatarContainer = (ImageView)findViewById(R.id.user_avatar);
+            final ImageView blurredBackground = (ImageView)findViewById(R.id.user_avatar_blurred);
+
+            if(ds[0] != null){
+                avatarContainer.setImageDrawable(ds[0]);
+                blurredBackground.setImageDrawable(ds[1]);
+                avatarContainer.setBackgroundResource(R.drawable.frame);
+            } else {
+                avatarContainer.setImageResource(R.mipmap.no_avatar);
+            }
+
+        }
     }
 
 
@@ -211,6 +414,7 @@ public class DetailActivity extends AppCompatActivity {
                 String re_counts = "";
                 String re_counta = "";
                 String re_totalscore = "";
+                String re_userid = "";
 
                 try {
                     JSONArray JArray = new JSONArray(json);
@@ -225,10 +429,11 @@ public class DetailActivity extends AppCompatActivity {
                         re_counts = jObject.optString("count_rank_s");
                         re_counta = jObject.optString("count_rank_a");
                         re_totalscore = jObject.optString("total_score");
+                        re_userid = jObject.optString("user_id");
                     }
                     Log.i("", "Received info:");
                     Log.i("JSONData", re_username + re_playcount + re_pp + re_grank + re_crank);
-                    String[] parsedPackage = {re_username, re_pp, re_playcount, re_grank, re_crank, re_countss, re_counts, re_counta, re_totalscore};
+                    String[] parsedPackage = {re_username, re_pp, re_playcount, re_grank, re_crank, re_countss, re_counts, re_counta, re_totalscore, re_userid};
 
                     // Now open an activity of COMPARE figures.
 

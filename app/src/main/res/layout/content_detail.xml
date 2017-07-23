@@ -4,205 +4,174 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.wu.osuinfo.DetailActivity"
-    tools:showIn="@layout/activity_detail">
+    tools:showIn="@layout/activity_detail"
+    >
 
-    <TextView
-        android:id="@+id/crank"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/rank"
-        android:layout_centerVertical="true"
-        android:text="CRank Here"
-        android:textAlignment="textEnd"
-        android:textSize="30sp" />
+    <Button
+        android:id="@+id/detail_subscribe"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="455dp"
+        android:elevation="4dp"
+        android:gravity="center"
+        android:text="Subscribe..." />
 
-    <TextView
-        android:id="@+id/user_name_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/user_name"
-        android:layout_alignBottom="@+id/user_name"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="16dp"
-        android:text="Name:"
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="31dp"
-        android:text="User's Name Here"
-        android:textAlignment="textEnd"
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/play_count"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/play_count_hint"
-        android:layout_alignBottom="@+id/play_count_hint"
-        android:layout_alignEnd="@+id/user_name"
-        android:text="Play Count Here"
-        android:textAlignment="textEnd"
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/rank_hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/crank_hint"
-        android:layout_alignStart="@+id/pp_hint"
-        android:layout_marginBottom="14dp"
-        android:text="Global Rank :"
-        android:textSize="30sp" />
+    <Button
+        android:id="@+id/compare"
+        android:layout_width="128dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="455dp"
+        android:elevation="4dp"
+        android:gravity="center"
+        android:text="Compare to..." />
 
     <TextView
         android:id="@+id/pp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/play_count"
-        android:layout_alignTop="@+id/pp_hint"
+        android:layout_alignBottom="@+id/user_name"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="35dp"
+        android:layout_marginEnd="8dp"
+        android:elevation="16dp"
         android:text="PP Here"
         android:textAlignment="textEnd"
-        android:textSize="30sp" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/play_count_hint"
+        android:id="@+id/user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/user_name_hint"
-        android:layout_below="@+id/user_name_hint"
-        android:layout_marginTop="18dp"
-        android:text="Play Count: "
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/rank"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/pp"
-        android:layout_alignTop="@+id/rank_hint"
-        android:text="GRank Here"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="170dp"
+        android:elevation="16dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="User's Name Here"
         android:textAlignment="textEnd"
+        android:textColor="@color/colorAccent"
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/crank_hint"
+        android:id="@+id/crank"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="305dp"
+        android:text="CRank Here"
+        android:textAlignment="textEnd"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/user_avatar"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_alignBottom="@+id/user_avatar_blurred"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:adjustViewBounds="true"
+        android:cropToPadding="true"
+        android:elevation="16dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/a_icon" />
+
+    <ImageView
+        android:id="@+id/user_avatar_blurred"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/rank_hint"
-        android:layout_centerVertical="true"
-        android:text="Country Rank :"
-        android:textSize="30sp" />
+        android:layout_height="256dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@mipmap/no_avatar"
+        android:elevation="8dp"
+        android:outlineProvider="bounds"
+        android:scaleType="centerCrop"/>
 
     <TextView
-        android:id="@+id/pp_hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/play_count_hint"
-        android:layout_below="@+id/play_count_hint"
-        android:layout_marginTop="16dp"
-        android:text="PP :"
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/ss_count_hint"
+        android:id="@+id/user_country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/crank_hint"
-        android:layout_below="@+id/crank"
-        android:layout_marginTop="16dp"
-        android:text="SS :"
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/s_count_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/ss_count"
-        android:layout_alignBottom="@+id/ss_count"
-        android:layout_marginStart="54dp"
-        android:layout_toEndOf="@+id/user_name_hint"
-        android:text="S :"
-        android:textAlignment="textStart"
-        android:textSize="30sp" />
-
-    <TextView
-        android:id="@+id/a_count_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/s_count"
-        android:layout_alignBottom="@+id/s_count"
-        android:layout_toStartOf="@+id/a_count"
-        android:text="A :"
-        android:textSize="30sp" />
+        android:layout_alignEnd="@+id/user_name"
+        android:layout_below="@+id/user_name"
+        android:elevation="16dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="from"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/ss_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/ss_count_hint"
-        android:layout_alignBottom="@+id/ss_count_hint"
-        android:layout_toEndOf="@+id/ss_count_hint"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="300dp"
         android:text="0"
         android:textAlignment="textStart"
         android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/ss_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/ss_count"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="300dp"
+        app:srcCompat="@drawable/ss_icon" />
 
     <TextView
         android:id="@+id/s_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/s_count_hint"
-        android:layout_alignBottom="@+id/s_count_hint"
-        android:layout_toEndOf="@+id/s_count_hint"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="350dp"
         android:text="0"
         android:textAlignment="textStart"
         android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/s_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/s_count"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="350dp"
+        app:srcCompat="@drawable/s_icon" />
 
     <TextView
         android:id="@+id/a_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/a_count_hint"
-        android:layout_alignBottom="@+id/a_count_hint"
-        android:layout_alignEnd="@+id/crank"
+        android:layout_alignStart="@+id/s_count"
+        android:layout_marginTop="400dp"
         android:text="0"
         android:textAlignment="textStart"
         android:textSize="30sp" />
 
-    <Button
-        android:id="@+id/back"
+    <ImageView
+        android:id="@+id/a_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="38dp"
-        android:layout_marginStart="11dp"
-        android:layout_toEndOf="@+id/button"
-        android:text="Back" />
+        android:layout_alignBottom="@id/a_count"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="400dp"
+        app:srcCompat="@drawable/a_icon" />
 
-    <Button
-        android:id="@+id/compare"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/detail_playcount"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/back"
-        android:layout_alignBottom="@+id/back"
-        android:layout_alignEnd="@+id/a_count"
-        android:text="Compare to..." />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/back"
-        android:layout_alignBottom="@+id/back"
-        android:layout_alignStart="@+id/ss_count_hint"
-        android:layout_marginStart="13dp"
-        android:text="Subscribe..." />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="370dp"
+        android:text="Played 0 times"
+        android:textAlignment="textEnd"
+        android:textSize="24sp" />
 
 </RelativeLayout>
