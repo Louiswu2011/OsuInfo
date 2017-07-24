@@ -20,7 +20,7 @@ public class Trend {
     private Drawable useravatar;
     private Integer avatarcolor;
     private Button userdetail;
-    private Button unsub;
+    // private Button unsub;
     private Drawable userblurredavatar;
 
     public Trend() {}
@@ -127,13 +127,15 @@ public class Trend {
         this.userdetail = n;
     }
 
-    public Button getUnsub(){
+    /*public Button getUnsub(){
         return this.unsub;
     }
+    */
 
-    public void setUnsub(Button n){
+    /*public void setUnsub(Button n){
         this.unsub = n;
     }
+    */
 
     public Integer getAvatarcolor(){
         return this.avatarcolor;

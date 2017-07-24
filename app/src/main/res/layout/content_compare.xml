@@ -1,152 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.wu.osuinfo.CompareActivity"
-    tools:showIn="@layout/activity_compare">
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:weightSum="1">
 
-    <ProgressBar
-        android:id="@+id/compare_split"
-        style="?android:attr/progressBarStyleHorizontal"
+    <TextView
+        android:id="@+id/centerTool"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <RelativeLayout
+        android:id="@+id/compare_RL1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:max="100"
-        android:progress="100" />
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/centerTool"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/compare_vs_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="VS"
-        android:textColor="@color/colorPrimary"
-        android:textSize="40sp" />
+        <ImageView
+            android:id="@+id/compare_useravatar1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@android:color/darker_gray" />
 
-    <TextView
-        android:id="@+id/compare_username1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:text="Cookiezi"
-        android:textSize="30sp" />
+        <TextView
+            android:id="@+id/compare_username1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="80dp"
+            android:text="Cookiezi"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/compare_username2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/compare_vs_hint"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:text="WubWoofWolf"
-        android:textSize="30sp" />
+        <TextView
+            android:id="@+id/compare_sssatime1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/compare_totalscore1"
+            android:layout_below="@+id/compare_totalscore1"
+            android:layout_marginTop="5dp"
+            android:text="Got 0 SS, 0 S and 0 A."
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/compare_pp1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="43dp"
-        android:text="10000pp @ 1st"
-        android:textAlignment="textEnd"
-        android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/compare_totalscore1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/compare_playcount1"
+            android:layout_below="@+id/compare_playcount1"
+            android:layout_marginTop="5dp"
+            android:text="Gained 0 points."
+            android:textColor="@color/colorPrimary"
+            android:textSize="23sp" />
 
-    <TextView
-        android:id="@+id/compare_pp2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/compare_pp1"
-        android:layout_marginTop="355dp"
-        android:text="9999pp @ 2nd"
-        android:textAlignment="textEnd"
-        android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/compare_pp1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="120dp"
+            android:text="10000pp @ 1st"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/compare_playcount1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/compare_username1"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="20dp"
-        android:text="Has played 0 times."
-        android:textSize="25sp"/>
+        <TextView
+            android:id="@+id/compare_playcount1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/compare_username1"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="40dp"
+            android:text="Has played 0 times."
+            android:textColor="@color/colorPrimary"
+            android:textSize="25sp" />
 
-    <TextView
-        android:id="@+id/compare_playcount2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/compare_username2"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="20dp"
-        android:text="Has played 0 times."
-        android:textSize="25sp"/>
+        <TextView
+            android:id="@+id/compare_comment1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/compare_sssatime1"
+            android:layout_below="@+id/compare_sssatime1"
+            android:layout_marginTop="5dp"
+            android:text="TextView"
+            android:textColor="@color/colorPrimary" />
 
-    <TextView
-        android:id="@+id/compare_totalscore1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/compare_playcount1"
-        android:layout_below="@+id/compare_playcount1"
-        android:layout_marginTop="5dp"
-        android:text="Gained 0 points."
-        android:textSize="23sp" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/compare_totalscore2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/compare_playcount2"
-        android:layout_below="@+id/compare_playcount2"
-        android:layout_marginTop="5dp"
-        android:text="Gained 0 points."
-        android:textSize="23sp" />
+    <RelativeLayout
+        android:id="@+id/compare_RL2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@id/centerTool"
+        android:layout_weight="1">
 
-    <TextView
-        android:id="@+id/compare_sssatime1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/compare_totalscore1"
-        android:layout_below="@+id/compare_totalscore1"
-        android:layout_marginTop="5dp"
-        android:text="Got 0 SS, 0 S and 0 A."
-        android:textSize="20sp" />
+        <ImageView
+            android:id="@+id/compare_useravatar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:srcCompat="@android:color/darker_gray" />
 
-    <TextView
-        android:id="@+id/compare_sssatime2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/compare_totalscore2"
-        android:layout_below="@+id/compare_totalscore2"
-        android:layout_marginTop="5dp"
-        android:text="Got 0 SS, 0 S and 0 A."
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/compare_totalscore2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/compare_playcount2"
+            android:layout_below="@+id/compare_playcount2"
+            android:layout_marginTop="5dp"
+            android:text="Gained 0 points."
+            android:textColor="@color/colorPrimary"
+            android:textSize="23sp" />
 
-    <TextView
-        android:id="@+id/compare_comment1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/compare_sssatime1"
-        android:layout_below="@+id/compare_sssatime1"
-        android:layout_marginTop="5dp"
-        android:text="TextView" />
+        <TextView
+            android:id="@+id/compare_sssatime2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/compare_totalscore2"
+            android:layout_below="@+id/compare_totalscore2"
+            android:layout_marginTop="5dp"
+            android:text="Got 0 SS, 0 S and 0 A."
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/compare_comment2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/compare_sssatime2"
-        android:layout_below="@+id/compare_sssatime2"
-        android:layout_marginTop="5dp"
-        android:text="TextView" />
+        <TextView
+            android:id="@+id/compare_comment2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/compare_sssatime2"
+            android:layout_below="@+id/compare_sssatime2"
+            android:layout_marginTop="5dp"
+            android:text="TextView"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/compare_pp2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="110dp"
+            android:text="9999pp @ 2nd"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/compare_username2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="70dp"
+            android:text="WubWoofWolf"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/compare_playcount2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/compare_username2"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="40dp"
+            android:text="Has played 0 times."
+            android:textColor="@color/colorPrimary"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
+
+

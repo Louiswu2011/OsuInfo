@@ -2,6 +2,7 @@ package com.wu.osuinfo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -95,6 +96,24 @@ public class searchFragment extends Fragment{
         final ProgressBar loadingBar = (ProgressBar)v.findViewById(R.id.loadingBar);
         final TextInputLayout textInputLayout = (TextInputLayout)v.findViewById(R.id.user_name_layout);
         final Animation shakespeare = AnimationUtils.loadAnimation(v.getContext(), R.anim.shake);
+
+
+
+        final Button clearsubs = (Button)v.findViewById(R.id.debug_clearsubs); // DEBUG ONLY
+        clearsubs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sp = v.getContext().getSharedPreferences("subList", Context.MODE_PRIVATE);
+                SharedPreferences.Editor spe = sp.edit();
+
+                spe.clear();
+
+                spe.commit();
+            }
+        });
+
+
+
 
         loadingBar.setVisibility(View.INVISIBLE);
 

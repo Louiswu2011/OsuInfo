@@ -1,11 +1,21 @@
 package com.wu.osuinfo;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class CompareActivity extends AppCompatActivity {
 
@@ -32,6 +42,11 @@ public class CompareActivity extends AppCompatActivity {
         Float player1efficiency = 0.0f;
         Float player2efficiency = 0.0f;
 
+        // ORDER: 0:name, 1:pp, 2:playcount, 3:grank, 4:crank, 5:ss, 6:s, 7:a, 8:totalscore, 9:uid, 10:usercountrycode
+        //       11:name, 12:pp, 13:playcount, 14:grank, 15:crank, 16:ss, 17:s, 18:a, 19:totalscore, 20:uid
+
+        // SHOULD GET AVATAR OF BOTH PLAYERS!
+
         // initialize all the variables...
         String re_username1 = receivedParsedPackage[0];
         String re_pp1 = receivedParsedPackage[1];
@@ -41,16 +56,19 @@ public class CompareActivity extends AppCompatActivity {
         String re_ss_count1 = receivedParsedPackage[5];
         String re_s_count1 = receivedParsedPackage[6];
         String re_a_count1 = receivedParsedPackage[7];
-        String re_username2 = receivedParsedPackage[10];
         String re_totalscore1 = receivedParsedPackage[8];
-        String re_pp2 = receivedParsedPackage[11];
-        String re_playcount2 = receivedParsedPackage[12];
-        String re_grank2 = receivedParsedPackage[13];
-        String re_crank2 = receivedParsedPackage[14];
-        String re_ss_count2 = receivedParsedPackage[15];
-        String re_s_count2 = receivedParsedPackage[16];
-        String re_a_count2 = receivedParsedPackage[17];
-        String re_totalscore2 = receivedParsedPackage[18];
+        String re_username2 = receivedParsedPackage[11];
+        String re_pp2 = receivedParsedPackage[12];
+        String re_playcount2 = receivedParsedPackage[13];
+        String re_grank2 = receivedParsedPackage[14];
+        String re_crank2 = receivedParsedPackage[15];
+        String re_ss_count2 = receivedParsedPackage[16];
+        String re_s_count2 = receivedParsedPackage[17];
+        String re_a_count2 = receivedParsedPackage[18];
+        String re_totalscore2 = receivedParsedPackage[19];
+
+        String re_uid1 = receivedParsedPackage[9];
+        String re_uid2 = receivedParsedPackage[20];
 
         // Log.i("Received Stuff", receivedParsedPackage.toString());
 
@@ -66,6 +84,12 @@ public class CompareActivity extends AppCompatActivity {
         TextView sssacount2 = (TextView)findViewById(R.id.compare_sssatime2);
         TextView comment1 = (TextView)findViewById(R.id.compare_comment1);
         TextView comment2 = (TextView)findViewById(R.id.compare_comment2);
+
+        ImageView avatarBackground1 = (ImageView)findViewById(R.id.compare_useravatar1);
+        ImageView avatarBackground2 = (ImageView)findViewById(R.id.compare_useravatar2);
+
+        RelativeLayout rl1 = (RelativeLayout)findViewById(R.id.compare_RL1);
+        RelativeLayout rl2 = (RelativeLayout)findViewById(R.id.compare_RL2);
 
         setTitle(re_username1 + " vs " + re_username2);
 
@@ -196,6 +220,68 @@ public class CompareActivity extends AppCompatActivity {
 
         //SECTION CLOSED
 
+        //START GETTING AVATARS
+        getUserAvatarFromUrl avatarTask = new getUserAvatarFromUrl();
+        avatarTask.execute(re_uid1, re_uid2);
+
+        //SHOWING RANKINGS
+        // TURNS OUT MALFUNCTIONING SO FORGET IT
+
+    }
+
+    public void setAvatar(Drawable[] ds){
+        ImageView avatarBackground1 = (ImageView)findViewById(R.id.compare_useravatar1);
+        ImageView avatarBackground2 = (ImageView)findViewById(R.id.compare_useravatar2);
+
+        if (ds[0] != null){
+            avatarBackground1.setImageDrawable(ds[0]);
+            avatarBackground1.setBackgroundResource(R.drawable.frame);
+        }
+        if (ds[1] != null){
+            avatarBackground2.setImageDrawable(ds[1]);
+            avatarBackground2.setBackgroundResource(R.drawable.frame);
+        }
+
+    }
+
+    private class getUserAvatarFromUrl extends AsyncTask<String, Integer, Drawable[]> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Drawable[] doInBackground(String... params) {
+            try {
+                Drawable[] ds = {null, null};
+
+                InputStream is1 = (InputStream) new URL("https://a.ppy.sh/" + params[0]).getContent();
+                Drawable d1 = Drawable.createFromStream(is1, "src name");
+                FastBlur fb1 = new FastBlur();
+                Bitmap b1 = fb1.fastblur((((BitmapDrawable)d1).getBitmap()), 1f ,30);
+                BitmapDrawable bitmapDrawable1 = new BitmapDrawable(b1);
+                Drawable bd1 = bitmapDrawable1;
+                InputStream is2 = (InputStream) new URL("https://a.ppy.sh/" + params[1]).getContent();
+                Drawable d2 = Drawable.createFromStream(is2, "src name");
+                FastBlur fb2 = new FastBlur();
+                Bitmap b2 = fb2.fastblur((((BitmapDrawable)d2).getBitmap()), 1f ,30);
+                BitmapDrawable bitmapDrawable2 = new BitmapDrawable(b2);
+                Drawable bd2 = bitmapDrawable2;
+                ds[0] = bitmapDrawable1;
+                ds[1] = bitmapDrawable2;
+                return ds;
+            } catch (IOException e) {
+                Drawable ds[] = {null, null};
+                e.printStackTrace();
+                return ds;
+            }
+        }
+        @Override
+        protected void onPostExecute(Drawable[] ds) {
+            super.onPostExecute(ds);
+            setAvatar(ds);
+        }
     }
 
 }

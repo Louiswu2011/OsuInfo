@@ -3,6 +3,7 @@ package com.wu.osuinfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -80,6 +81,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // final Button backButton = (Button)findViewById(R.id.back);
         final Button compareButton = (Button)findViewById(R.id.compare);
+        final Button subButton = (Button)findViewById(R.id.detail_subscribe);
 
         final ImageView avatarContainer = (ImageView)findViewById(R.id.user_avatar);
         final ImageView blurredBackground = (ImageView)findViewById(R.id.user_avatar_blurred);
@@ -92,7 +94,7 @@ public class DetailActivity extends AppCompatActivity {
         String re_ss_count = receivedParsedPackage[5];
         String re_s_count = receivedParsedPackage[6];
         String re_a_count = receivedParsedPackage[7];
-        String re_userid = receivedParsedPackage[9];
+        final String re_userid = receivedParsedPackage[9];
         String re_usercountry = receivedParsedPackage[10];
 
         String re_crankt = "";
@@ -106,7 +108,13 @@ public class DetailActivity extends AppCompatActivity {
 
         FastBlur fb = new FastBlur();
 
-        Float re_pp_number = Float.parseFloat(re_pp);
+        Float re_pp_number = 0f;
+
+        try{
+            re_pp_number = Float.parseFloat(re_pp);
+        }catch (NumberFormatException e){
+            re_pp_number = 0f;
+        }
         Integer re_pp_number_int = re_pp_number.intValue();
         re_pp = re_pp_number_int.toString() + "pp";
 
@@ -119,6 +127,9 @@ public class DetailActivity extends AppCompatActivity {
                 break;
             case "3":
                 re_pp += " @ 3rd";
+                break;
+            case "null":
+                re_pp += " @ No Rank";
                 break;
             default:
                 re_pp += " @ " + re_grank + "th";
@@ -137,13 +148,35 @@ public class DetailActivity extends AppCompatActivity {
             case "3":
                 re_crankt += " 3rd";
                 break;
+            case "null":
+                re_crankt = "Doesn't have ranked yet";
+                break;
             default:
                 re_crankt += " " + re_crank + "th";
         }
         re_crankt += " in ";
         re_crankt += locale.getDisplayCountry();
 
-        re_playcount = "Played " + re_playcount + " times.";
+
+        if(!Objects.equals(re_playcount, "null")){
+            re_playcount = "Played " + re_playcount + " times.";
+        } else {
+            re_playcount = "Haven't played once recently";
+        }
+
+        if(Objects.equals(re_ss_count, "null")){
+            re_ss_count = "0";
+        }
+
+        if(Objects.equals(re_s_count, "null")){
+            re_s_count = "0";
+        }
+
+        if(Objects.equals(re_a_count, "null")){
+            re_a_count = "0";
+        }
+
+        Log.i("Debug Mode", re_ss_count + re_s_count + re_a_count + re_playcount);
 
         username.setText(re_username);
         pp.setText(re_pp);
@@ -181,6 +214,39 @@ public class DetailActivity extends AppCompatActivity {
                 });
 
                 inputDialogBuilder.show();
+            }
+        });
+
+        subButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder check = new AlertDialog.Builder(DetailActivity.this);
+                check.setTitle("Add to subscription list?")
+                        .setMessage("Do you want to add " + re_username + " to you subscription list?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Add to subList
+                                SharedPreferences sp = DetailActivity.this.getSharedPreferences("subList", Context.MODE_PRIVATE);
+                                String newSubList = sp.getString("listString", "") + "|" + re_userid;
+
+                                SharedPreferences.Editor spe = sp.edit();
+
+                                spe.putString("listString", newSubList);
+                                spe.apply();
+
+                                Toast.makeText(DetailActivity.this, "Successfully added " + re_username + " to your subscription list!", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Let's pretend nothing happened.
+                                dialog.dismiss();
+                            }
+                        })
+                        .setCancelable(false)
+                        .show();
             }
         });
 

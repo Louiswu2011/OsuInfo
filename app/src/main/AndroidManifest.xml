@@ -3,7 +3,7 @@
     package="com.wu.osuinfo">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,8 +11,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -32,7 +31,8 @@
             android:name=".CompareActivity"
             android:label="@string/title_activity_compare"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TrendActivity"></activity>
+        <activity android:name=".TrendActivity" />
+        <activity android:name=".SubscriptionManageActivity"></activity>
     </application>
 
 </manifest>

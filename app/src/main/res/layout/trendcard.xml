@@ -15,7 +15,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="15dp"
-        app:cardBackgroundColor="@color/cardview_dark_background"
+        app:cardBackgroundColor="@color/cardview_light_background"
         app:cardCornerRadius="5dp"
         app:cardElevation="2dp"
         card_view:cardUseCompatPadding="true">
@@ -40,8 +40,8 @@
                 android:layout_height="128dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="77dp"
+                android:layout_marginLeft="11dp"
+                android:layout_marginTop="71dp"
                 android:adjustViewBounds="true"
                 android:background="@drawable/frame"
                 android:elevation="8dp"
@@ -58,6 +58,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="120dp"
                 android:elevation="8dp"
+                android:fontFamily="sans-serif-condensed"
                 android:text="Cookiezi"
                 android:textAlignment="textEnd"
                 android:textColor="@color/colorAccent"
@@ -131,16 +132,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:text="Detail"
-                android:textColor="@color/colorPrimary" />
-
-            <Button
-                android:id="@+id/trend_unsub"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/trend_playerdetail"
-                android:layout_toStartOf="@+id/trend_playerdetail"
-                android:text="Unsubscribe"
                 android:textColor="@color/colorPrimary" />
 
         </RelativeLayout>

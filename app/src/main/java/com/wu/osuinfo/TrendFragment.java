@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
+import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,16 +50,13 @@ public class TrendFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    public RecyclerView recyclerView;
+    public TrendAdapter trendAdapter;
+    public List<Trend> trendList;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
-
-    private RecyclerView recyclerView;
-    private TrendAdapter trendAdapter;
-    private List<Trend> trendList;
 
 
 
@@ -99,6 +100,7 @@ public class TrendFragment extends Fragment {
         String[] subList = {};
 
         recyclerView = (RecyclerView)v.findViewById(R.id.recyclerView);
+        FloatingActionButton fab = (FloatingActionButton)v.findViewById(R.id.fab);
 
         trendList = new ArrayList<>();
         trendAdapter = new TrendAdapter(getContext(), trendList);
@@ -108,6 +110,51 @@ public class TrendFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(trendAdapter);
 
+        SwipeableRecyclerViewTouchListener swipeListener = new SwipeableRecyclerViewTouchListener(recyclerView, new SwipeableRecyclerViewTouchListener.SwipeListener() {
+            @Override
+            public boolean canSwipeLeft(int position) {
+                return true;
+            }
+
+            @Override
+            public boolean canSwipeRight(int position) {
+                return true;
+            }
+
+            @Override
+            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                SharedPreferences sp = getContext().getSharedPreferences("subList", Context.MODE_PRIVATE);
+                String oldSubList = sp.getString("listString", "");
+                String[] realOldSubList = oldSubList.split("\\|");
+                for (int position : reverseSortedPositions){
+                    trendList.remove(position);
+                    trendAdapter.notifyItemRemoved(position);
+
+                }
+                trendAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                for (int position : reverseSortedPositions){
+                    trendList.remove(position);
+                    trendAdapter.notifyItemRemoved(position);
+                }
+                trendAdapter.notifyDataSetChanged();
+            }
+        });
+
+        recyclerView.addOnItemTouchListener(swipeListener);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gotoSubsManagement = new Intent(v.getContext(), SubscriptionManageActivity.class);
+                startActivity(gotoSubsManagement);
+            }
+        });
+
+
         // Now fetch the subscription list
         SharedPreferences slist = v.getContext().getSharedPreferences("subList", Context.MODE_PRIVATE);
         String listString = slist.getString("listString", "124493|4787150|2558286");  // here we got Cookiezi|Vaxei|Rafis XD
@@ -115,7 +162,7 @@ public class TrendFragment extends Fragment {
         subList = listString.split("\\|");
 
         try {
-            prepareTrends(subList);
+            prepareTrends(subList, v);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,7 +172,7 @@ public class TrendFragment extends Fragment {
 
 
 
-    private void prepareTrends(String[] subscription) throws Exception {
+    private void prepareTrends(String[] subscription, View v) throws Exception {
         // Debug only.
         // Trend cookiezi = new Trend("cookiezi", "13928", "13827", "1", "2", "160571088386", "160563443901", "18437", "18436", getContext().getDrawable(R.mipmap.ic_cookiezi));
         // Trend vaxei = new Trend("Vaxei", "13407", "13424", "2", "3", "166023938049", "166020091321", "106000", "105890", getContext().getDrawable(R.mipmap.ic_vaxei));
@@ -138,10 +185,13 @@ public class TrendFragment extends Fragment {
         int listLength = subscription.length;
         int i;
         for (i = 0; i < listLength; i++){
-            Log.i("Arranging Cards Beta", "i:" + Integer.toString(i) + " listLength:" + Integer.toString(listLength));
-            String subUser = subscription[i];
-            Log.i("Arranging Cards Beta", "Now arranging: " + subUser);
-            AsyncTaskTool.execute(new getCardInfoTask(), subUser);
+            if(!Objects.equals(subscription[i], "")){
+                Log.i("Arranging Cards Beta", "i:" + Integer.toString(i) + " listLength:" + Integer.toString(listLength));
+                String subUser = subscription[i];
+                Log.i("Arranging Cards Beta", "Now arranging: " + subUser);
+                getCardInfoParams g = new getCardInfoParams(v, subUser);
+                AsyncTaskTool.execute(new getCardInfoTask(), g);
+            }
         }
     }
 
@@ -190,7 +240,17 @@ public class TrendFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public class getCardInfoTask extends AsyncTask<String, Integer, Object[]>{
+    private static class getCardInfoParams {
+        String username;
+        View view;
+
+        getCardInfoParams(View v, String s) {
+            this.view = v;
+            this.username = s;
+        }
+    }
+
+    public class getCardInfoTask extends AsyncTask<getCardInfoParams, Integer, Object[]>{
 
         @Override
         protected void onPreExecute() {
@@ -198,11 +258,11 @@ public class TrendFragment extends Fragment {
         }
 
         @Override
-        protected Object[] doInBackground(String... params) {
+        protected Object[] doInBackground(getCardInfoParams... params) {
             if(!Objects.equals(params[0], "")){
                 Log.i("", "Start Fetching JSON...");
                 String token = getResources().getString(R.string.apikey);
-                String username = params[0];
+                String username = params[0].username;
                 String url = "https://osu.ppy.sh/api/get_user";
                 String param = "k=" + token + "&u=" + username;
                 String json = "";
@@ -239,17 +299,23 @@ public class TrendFragment extends Fragment {
                         e2.printStackTrace();
                     }
                 }
-                json = json + "|" + params[0];
-                Object[] p = {null, null, null};
+                json = json + "|" + params[0].username;
+                Object[] p = {null, null, null, null};
                 InputStream is = null;
                 try {
-                    is = (InputStream) new URL("https://a.ppy.sh/" + params[0]).getContent();
+                    is = (InputStream) new URL("https://a.ppy.sh/" + params[0].username).getContent();
                     avatar = Drawable.createFromStream(is, "src name");
                     FastBlur fb = new FastBlur();
-                    Bitmap b1 = fb.fastblur((((BitmapDrawable)avatar).getBitmap()), 1f ,30);
+                    try{
+                        Bitmap b1 = fb.fastblur((((BitmapDrawable)avatar).getBitmap()), 1f ,30);
+                        p[2] = new BitmapDrawable(b1);
+                    } catch (NullPointerException e) {
+                        Bitmap b1 = null;
+                        p[2] = avatar;
+                    }
                     p[0] = json;
                     p[1] = avatar;
-                    p[2] = new BitmapDrawable(b1);
+                    p[3] = params[0].view;
                     return p;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -258,6 +324,7 @@ public class TrendFragment extends Fragment {
                     FastBlur fb = new FastBlur();
                     Bitmap b2 = fb.fastblur((((BitmapDrawable)p[1]).getBitmap()), 1f ,30);
                     p[2] = new BitmapDrawable(b2);
+                    p[3] = params[0].view;
                     return p;
                 }
 
@@ -282,7 +349,10 @@ public class TrendFragment extends Fragment {
                 // String username = resultpackage[1];
                 Drawable re_avatar = (Drawable)d[1];
                 Drawable re_avatar_blurred = (Drawable)d[2];
+                View v = (View)d[3];
 
+
+                final ProgressBar ldBar = (ProgressBar)v.findViewById(R.id.trend_loadingIndicator);
                 final Intent gotoDetail = new Intent(getContext(), DetailActivity.class);
                 if (!Objects.equals(json, "[]")) {
 
@@ -324,6 +394,8 @@ public class TrendFragment extends Fragment {
 
                         // Initialize Cards
                         createTrend(re_username, re_pp, re_grank, re_totalscore, re_playcount, re_avatar, re_avatar_blurred);
+                        ldBar.setVisibility(View.INVISIBLE);
+
 
                     } catch (Exception e) {
                         Log.e("JSONParsingError", "Something went wrong parsing JSON.");
