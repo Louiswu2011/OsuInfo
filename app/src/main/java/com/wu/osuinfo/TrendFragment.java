@@ -186,19 +186,52 @@ public class TrendFragment extends Fragment {
         int i;
         for (i = 0; i < listLength; i++){
             if(!Objects.equals(subscription[i], "")){
-                Log.i("Arranging Cards Beta", "i:" + Integer.toString(i) + " listLength:" + Integer.toString(listLength));
+                Log.i("Arranging Cards BETA", "i:" + Integer.toString(i) + " listLength:" + Integer.toString(listLength));
                 String subUser = subscription[i];
-                Log.i("Arranging Cards Beta", "Now arranging: " + subUser);
+                Log.i("Arranging Cards BETA", "Now arranging: " + subUser);
                 getCardInfoParams g = new getCardInfoParams(v, subUser);
                 AsyncTaskTool.execute(new getCardInfoTask(), g);
             }
         }
     }
 
+    // Should save previous
+
+    // name, pp, prepp, rank, prerank, tscore, pretscore, pc, prepc, avatar, blurredavatar #NOTICE: NOT PRESCORE BUT NOW SCORE! AND SCORE = SCORE CHANGED!
+
     public void createTrend(String uName, String uPP, String uRank, String uTotalScore, String uPlayCount, Drawable uAvatar, Drawable uAvatarBlurred){
-        Trend subUser = new Trend(uName, uPP, uPP, uRank, uRank, uTotalScore, uTotalScore, uPlayCount, uPlayCount, uAvatar, uAvatarBlurred);
+        SharedPreferences sp = getContext().getSharedPreferences("previousScore", Context.MODE_PRIVATE);
+        // Calculate the diff
+        Log.i("Calculate the diff BETA", sp.getString(uName + "pp", "Nothing") + "|" + sp.getString(uName + "rank", "Nothing") + "|" + sp.getString(uName + "score", "Nothing") + "|" + sp.getString(uName + "pc", "Nothing"));
+        Float diffPP = Float.parseFloat(uPP) - Float.parseFloat(sp.getString(uName + "pp", uPP));
+        String diffPPinString = Integer.toString(Math.round(diffPP));
+        Log.i("Calculate the diff BETA", diffPPinString);
+
+        Float diffRank = Float.parseFloat(uRank) - Float.parseFloat(sp.getString(uName + "rank", uRank));
+        String diffRankinString = Integer.toString(Math.round(diffRank));
+        Log.i("Calculate the diff BETA", diffRankinString);
+
+        Float diffScore = Float.parseFloat(uTotalScore) - Float.parseFloat(sp.getString(uName + "score", uTotalScore));
+        String diffScoreinString = Integer.toString(Math.round(diffScore));
+        Log.i("Calculate the diff BETA", diffScoreinString);
+
+        Float diffPC = Float.parseFloat(uPlayCount) - Float.parseFloat(sp.getString(uName + "pc", uPlayCount));
+        String diffPCinString = Integer.toString(Math.round(diffPC));
+        Log.i("Calculate the diff BETA", diffPCinString);
+
+        // Create trend card
+        Trend subUser = new Trend(uName, uPP, uPP, uRank, uRank, diffScoreinString, uTotalScore, diffPCinString, uPlayCount, uAvatar, uAvatarBlurred);
         trendList.add(subUser);
         trendAdapter.notifyDataSetChanged();
+
+        // Register new value
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putString(uName + "pp", uPP);
+        spe.putString(uName + "rank", uRank);
+        spe.putString(uName + "score", uTotalScore);
+        spe.putString(uName + "pc", uPlayCount);
+        spe.apply();
+        Log.i("Calculate the diff BETA", sp.getString(uName + "pp", "Nothing") + "|" + sp.getString(uName + "rank", "Nothing") + "|" + sp.getString(uName + "score", "Nothing") + "|" + sp.getString(uName + "pc", "Nothing"));
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -390,10 +423,12 @@ public class TrendFragment extends Fragment {
                         }
                         Log.i("", "Received info:");
                         Log.i("JSONData", re_username + re_playcount + re_pp + re_grank + re_crank);
+                        Float ppInFloat = Float.parseFloat(re_pp);
+                        String new_pp = Integer.toString(Math.round(ppInFloat));
                         // String[] parsedPackage = {re_username, re_pp, re_playcount, re_grank, re_crank, re_countss, re_counts, re_counta, re_totalscore, re_userid,re_usercountry};
 
                         // Initialize Cards
-                        createTrend(re_username, re_pp, re_grank, re_totalscore, re_playcount, re_avatar, re_avatar_blurred);
+                        createTrend(re_username, new_pp, re_grank, re_totalscore, re_playcount, re_avatar, re_avatar_blurred);
                         ldBar.setVisibility(View.INVISIBLE);
 
 

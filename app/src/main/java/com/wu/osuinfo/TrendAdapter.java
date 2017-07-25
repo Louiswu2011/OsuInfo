@@ -63,6 +63,8 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.trendViewHol
         holder.ubg.setImageDrawable(trend.getUserblurredavatar());
         holder.uprescore.setText(trend.getUserpretotalscore());
         holder.uprecount.setText(trend.getUserpreplaycount());
+        // holder.uscore.setText(trend.getUsertotalscore());
+        // holder.ucount.setText(trend.getUserplaycount());
         holder.urankpp.setText(trend.getUserpp() + "pp @ " + trend.getUserrank() + "th");
         holder.udetail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +89,22 @@ public class TrendAdapter extends RecyclerView.Adapter<TrendAdapter.trendViewHol
                 return true;
             }
         });
+
+        // Dealing with 0 change
+        String scoreChange = trend.getUsertotalscore();
+        String countChange = trend.getUserplaycount();
+
+        if(Objects.equals(scoreChange, "0")){
+            trend.setUsertotalscore("+0");
+        }
+
+        if(Objects.equals(countChange, "0")){
+            trend.setUserplaycount("+0");
+        }
+
+        // Now set the change textview
+        holder.uscore.setText(trend.getUsertotalscore());
+        holder.ucount.setText(trend.getUserplaycount());
     }
 
     @Override

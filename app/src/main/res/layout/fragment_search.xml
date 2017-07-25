@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name_layout"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="45dp"
             android:text="Search" />
 
         <ProgressBar
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:text="version The Ultimate Alpha Build 0043" />
+            android:text="version The Ultimate Alpha Build 0061" />
 
         <Button
             android:id="@+id/debug_clearsubs"
@@ -87,6 +87,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Clear SharedPreferences (DEBUG ONLY)" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_name_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:entries="@array/modes" />
 
 
     </RelativeLayout>

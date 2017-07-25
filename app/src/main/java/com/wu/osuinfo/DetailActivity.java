@@ -1,5 +1,6 @@
 package com.wu.osuinfo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,6 +47,9 @@ import java.util.Map;
 import java.util.Objects;
 
 public class DetailActivity extends AppCompatActivity {
+
+    final public String[] modes = {"0", "1", "2", "3"};
+    final public String[] modesName = {"osu!Standard", "osu!Taiko", "osu!CTB", "osu!Mania"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView scount = (TextView)findViewById(R.id.s_count);
         TextView acount = (TextView)findViewById(R.id.a_count);
         TextView country = (TextView)findViewById(R.id.user_country);
+        TextView mode = (TextView)findViewById(R.id.detail_mode);
 
         // final Button backButton = (Button)findViewById(R.id.back);
         final Button compareButton = (Button)findViewById(R.id.compare);
@@ -96,6 +102,8 @@ public class DetailActivity extends AppCompatActivity {
         String re_a_count = receivedParsedPackage[7];
         final String re_userid = receivedParsedPackage[9];
         String re_usercountry = receivedParsedPackage[10];
+        final String re_modeNumber = receivedParsedPackage[11];
+        String re_mode = modesName[Integer.parseInt(re_modeNumber)];
 
         String re_crankt = "";
 
@@ -186,6 +194,15 @@ public class DetailActivity extends AppCompatActivity {
         sscount.setText(re_ss_count);
         scount.setText(re_s_count);
         acount.setText(re_a_count);
+        mode.setText("In " + re_mode + " ...");
+
+        // Hide soft keyboard
+        InputMethodManager imm = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = getCurrentFocus();
+        if (view == null) {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
 
         compareButton.setOnClickListener(new View.OnClickListener() {
@@ -209,7 +226,7 @@ public class DetailActivity extends AppCompatActivity {
                         final getUserJSON uTask = new getUserJSON();
                         String username = compareInput.getText().toString();
 
-                        uTask.execute(username);
+                        uTask.execute(username, re_modeNumber);
                     }
                 });
 
@@ -407,8 +424,9 @@ public class DetailActivity extends AppCompatActivity {
             Log.i("", "Start Fetching JSON...");
             String token = getResources().getString(R.string.apikey);
             String username = params[0];
+            String mode = params[1];
             String url = "https://osu.ppy.sh/api/get_user";
-            String param = "k=" + token + "&u=" + username;
+            String param = "k=" + token + "&u=" + username + "&m=" + mode;
             String json = "";
             BufferedReader in = null;
             try {

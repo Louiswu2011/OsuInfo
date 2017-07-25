@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="48dp"
     android:baselineAligned="false"
     android:orientation="vertical"
     android:weightSum="1">
@@ -35,7 +36,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="40dp"
             android:text="Cookiezi"
             android:textColor="@color/colorAccent"
             android:textSize="30sp" />
@@ -68,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="30dp"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="80dp"
             android:text="10000pp @ 1st"
             android:textAlignment="textEnd"
             android:textColor="@color/colorPrimary"
@@ -162,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="60dp"
             android:text="WubWoofWolf"
             android:textColor="@color/colorAccent"
             android:textSize="30sp" />

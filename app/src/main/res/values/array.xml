@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="modes">
+        <item>osu!Standard</item>
+        <item>osu!Taiko</item>
+        <item>osu!CTB</item>
+        <item>osu!Mania</item>
+    </string-array>
+</resources>

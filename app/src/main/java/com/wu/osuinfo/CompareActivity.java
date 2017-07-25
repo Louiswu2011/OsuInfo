@@ -1,14 +1,19 @@
 package com.wu.osuinfo;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,6 +21,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Objects;
 
 public class CompareActivity extends AppCompatActivity {
 
@@ -93,6 +99,9 @@ public class CompareActivity extends AppCompatActivity {
 
         setTitle(re_username1 + " vs " + re_username2);
 
+        avatarBackground1.setBackgroundResource(R.drawable.frame);
+        avatarBackground2.setBackgroundResource(R.drawable.frame);
+
         name1.setText(re_username1);
         name2.setText(re_username2);
         switch (re_grank1){
@@ -128,95 +137,124 @@ public class CompareActivity extends AppCompatActivity {
         sssacount1.setText("Got " + re_ss_count1 + " SS, " + re_s_count1 + " S and " + re_a_count1 + " A.");
         sssacount2.setText("Got " + re_ss_count2 + " SS, " + re_s_count2 + " S and " + re_a_count2 + " A.");
 
+        // Hide soft keyboard
+        InputMethodManager imm = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = getCurrentFocus();
+        if (view == null) {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
         // calculate index
-        player1efficiency = Float.parseFloat(re_totalscore1) / Float.parseFloat(re_playcount1);
-        player2efficiency = Float.parseFloat(re_totalscore2) / Float.parseFloat(re_playcount2);
-        Log.i("Calculations", player1efficiency.toString() + " vs " + player2efficiency.toString());
-
-        // SECTION START
-        // construct comments
-        // Step 1 : look for rankings
-        String comment_player1 = re_username1;
-        String comment_player2 = re_username2;
-        int player1step1 = 0, player1step2 = 0, player1step3 = 0;  // 1 to win the step, 0 to lose the step
-        int player2step1 = 0, player2step2 = 0, player2step3 = 0;  // gets "and" when win, "but" when lose
-
-        if (Integer.parseInt(re_grank1) < Integer.parseInt(re_grank2)){
-            comment_player1 += (HIGHRANKER + re_username2 + " ");
-            player1step1 = 1;
-            comment_player2 += (HIGHRANKER_LOWER + re_username1 + " ");
-            player2step1 = 0;
-
+        if(Objects.equals(re_totalscore1, "null") | Objects.equals(re_playcount1, "null") | Objects.equals(re_totalscore2, "null") | Objects.equals(re_playcount2, "null")){
+            Log.i("Calculations", "Well... Someone has never played this mode before... Hmmmmmm... Aborting and automatically set the first player to be more efficient XD");
+            player1efficiency = 2f;
+            player2efficiency = 1f;
         } else {
-            comment_player2 += (HIGHRANKER + re_username1 + " ");
-            player1step1 = 0;
-            comment_player1 += (HIGHRANKER_LOWER + re_username2 + " ");
-            player2step1 = 1;
+            player1efficiency = Float.parseFloat(re_totalscore1) / Float.parseFloat(re_playcount1);
+            player2efficiency = Float.parseFloat(re_totalscore2) / Float.parseFloat(re_playcount2);
+            Log.i("Calculations", player1efficiency.toString() + " vs " + player2efficiency.toString());
         }
 
-        // Step 2 : look for ss count
-        if (Integer.parseInt(re_ss_count1) > Integer.parseInt(re_ss_count2)){
-            if (player1step1 == 1){
-                comment_player1 += ("and" + SSRANKER + re_username2 + " ");
-                player1step2 = 1; // that said player2step1 must be 0, not need to use if again
-                comment_player2 += ("and" + SSRANKER_LOWER + re_username1 + " ");
-                player2step2 = 0;
-            } else {
-                comment_player1 += ("but" + SSRANKER + re_username2 + " ");
-                player1step2 = 1; // that said player2step1 must be 1, not need to use if again
-                comment_player2 += ("but" + SSRANKER_LOWER + re_username1 + " ");
-                player2step2 = 0;
-            }
-        } else if (Integer.parseInt(re_ss_count1) == Integer.parseInt(re_ss_count2)){
-            // both gets win
-            player1step2 = 1;
-            player2step2 = 1;
-            comment_player1 += ("and" + SSRANKER_SAME);
-            comment_player2 += ("and" + SSRANKER_SAME);
+        if(Objects.equals(re_grank1, "null") | Objects.equals(re_grank2, "null") | Objects.equals(re_ss_count1, "null") | Objects.equals(re_ss_count2, "null") | Objects.equals(re_s_count1, "null") | Objects.equals(re_s_count2, "null")){
+            AlertDialog.Builder neverplayedDialog = new AlertDialog.Builder(CompareActivity.this);
+            neverplayedDialog.setTitle("Oops!")
+                    .setMessage("Looks like the player has never played this mode before!")
+                    .setNeutralButton("Well...", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
         } else {
-            if (player2step1 == 1){
-                comment_player2 += ("and" + SSRANKER + re_username1 + " ");
-                player2step2 = 1; // that said player1step2 must be 0, not need to use if again
-                comment_player1 += ("and" + SSRANKER_LOWER + re_username2 + " ");
-                player1step2 = 0;
-            } else {
-                comment_player2 += ("but" + SSRANKER + re_username1 + " ");
-                player2step2 = 1; // that said player1step2 must be 1, not need to use if again
-                comment_player1 += ("but" + SSRANKER_LOWER + re_username2 + " ");
-                player1step2 = 0;
-            }
-        }
+            // SECTION START
+            // construct comments
+            // Step 1 : look for rankings
+            String comment_player1 = re_username1;
+            String comment_player2 = re_username2;
+            int player1step1 = 0, player1step2 = 0, player1step3 = 0;  // 1 to win the step, 0 to lose the step
+            int player2step1 = 0, player2step2 = 0, player2step3 = 0;  // gets "and" when win, "but" when lose
 
-        // Step 3 : look for efficiency i.e. the ratio between TotalScore and PlayCount (that's bullsh*t)
-        if (player1efficiency > player2efficiency){ // and there can't be equal situation so no need for elseif
-            if (player1step2 == 1){
-                comment_player1 += ("and" + EFFICIENCY + re_username2 + " ");
-                player1step3 = 1;
-                comment_player2 += ("and" + EFFICIENCY_LOWER + re_username1 + " ");
-                player2step3 = 0;
-            } else {
-                comment_player1 += ("but" + EFFICIENCY + re_username2 + " ");
-                player1step3 = 1;
-                comment_player2 += ("but" + EFFICIENCY_LOWER + re_username1 + " ");
-                player2step3 = 0;
-            }
-        } else {
-            if (player2step2 == 1){
-                comment_player2 += ("and" + EFFICIENCY + re_username1 + " ");
-                player2step3 = 1;
-                comment_player1 += ("and" + EFFICIENCY_LOWER + re_username2 + " ");
-                player1step3 = 0;
-            } else {
-                comment_player2 += ("but" + EFFICIENCY + re_username1 + " ");
-                player2step3 = 1;
-                comment_player1 += ("but" + EFFICIENCY_LOWER + re_username2 + " ");
-                player1step3 = 0;
-            }
-        }
+            if (Integer.parseInt(re_grank1) < Integer.parseInt(re_grank2)){
+                comment_player1 += (HIGHRANKER + re_username2 + " ");
+                player1step1 = 1;
+                comment_player2 += (HIGHRANKER_LOWER + re_username1 + " ");
+                player2step1 = 0;
 
-        // Final step (Whooo..Tiring Coding) : show result
-        comment1.setText(comment_player1);
-        comment2.setText(comment_player2);
+            } else {
+                comment_player2 += (HIGHRANKER + re_username1 + " ");
+                player1step1 = 0;
+                comment_player1 += (HIGHRANKER_LOWER + re_username2 + " ");
+                player2step1 = 1;
+            }
+
+            // Step 2 : look for ss count
+            if (Integer.parseInt(re_ss_count1) > Integer.parseInt(re_ss_count2)){
+                if (player1step1 == 1){
+                    comment_player1 += ("and" + SSRANKER + re_username2 + " ");
+                    player1step2 = 1; // that said player2step1 must be 0, not need to use if again
+                    comment_player2 += ("and" + SSRANKER_LOWER + re_username1 + " ");
+                    player2step2 = 0;
+                } else {
+                    comment_player1 += ("but" + SSRANKER + re_username2 + " ");
+                    player1step2 = 1; // that said player2step1 must be 1, not need to use if again
+                    comment_player2 += ("but" + SSRANKER_LOWER + re_username1 + " ");
+                    player2step2 = 0;
+                }
+            } else if (Integer.parseInt(re_ss_count1) == Integer.parseInt(re_ss_count2)){
+                // both gets win
+                player1step2 = 1;
+                player2step2 = 1;
+                comment_player1 += ("and" + SSRANKER_SAME);
+                comment_player2 += ("and" + SSRANKER_SAME);
+            } else {
+                if (player2step1 == 1){
+                    comment_player2 += ("and" + SSRANKER + re_username1 + " ");
+                    player2step2 = 1; // that said player1step2 must be 0, not need to use if again
+                    comment_player1 += ("and" + SSRANKER_LOWER + re_username2 + " ");
+                    player1step2 = 0;
+                } else {
+                    comment_player2 += ("but" + SSRANKER + re_username1 + " ");
+                    player2step2 = 1; // that said player1step2 must be 1, not need to use if again
+                    comment_player1 += ("but" + SSRANKER_LOWER + re_username2 + " ");
+                    player1step2 = 0;
+                }
+            }
+
+            // Step 3 : look for efficiency i.e. the ratio between TotalScore and PlayCount (that's bullsh*t)
+            if (player1efficiency > player2efficiency){ // and there can't be equal situation so no need for elseif
+                if (player1step2 == 1){
+                    comment_player1 += ("and" + EFFICIENCY + re_username2 + " ");
+                    player1step3 = 1;
+                    comment_player2 += ("and" + EFFICIENCY_LOWER + re_username1 + " ");
+                    player2step3 = 0;
+                } else {
+                    comment_player1 += ("but" + EFFICIENCY + re_username2 + " ");
+                    player1step3 = 1;
+                    comment_player2 += ("but" + EFFICIENCY_LOWER + re_username1 + " ");
+                    player2step3 = 0;
+                }
+            } else {
+                if (player2step2 == 1){
+                    comment_player2 += ("and" + EFFICIENCY + re_username1 + " ");
+                    player2step3 = 1;
+                    comment_player1 += ("and" + EFFICIENCY_LOWER + re_username2 + " ");
+                    player1step3 = 0;
+                } else {
+                    comment_player2 += ("but" + EFFICIENCY + re_username1 + " ");
+                    player2step3 = 1;
+                    comment_player1 += ("but" + EFFICIENCY_LOWER + re_username2 + " ");
+                    player1step3 = 0;
+                }
+            }
+
+            // Final step (Whooo..Tiring Coding) : show result
+            comment1.setText(comment_player1);
+            comment2.setText(comment_player2);
+        }
 
         //SECTION CLOSED
 

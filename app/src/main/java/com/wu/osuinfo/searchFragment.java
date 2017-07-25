@@ -20,6 +20,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,11 +47,11 @@ public class searchFragment extends Fragment{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    final public String[] modes = {"0", "1", "2", "3"};
+    final public String[] modesName = {"osu!Standard", "osu!Taiko", "osu!CTB", "osu!Mania"};
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public searchFragment() {
@@ -96,6 +97,7 @@ public class searchFragment extends Fragment{
         final ProgressBar loadingBar = (ProgressBar)v.findViewById(R.id.loadingBar);
         final TextInputLayout textInputLayout = (TextInputLayout)v.findViewById(R.id.user_name_layout);
         final Animation shakespeare = AnimationUtils.loadAnimation(v.getContext(), R.anim.shake);
+        final Spinner spinner = (Spinner)v.findViewById(R.id.spinner);
 
 
 
@@ -137,11 +139,13 @@ public class searchFragment extends Fragment{
         v.findViewById(R.id.searchbtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Integer position = spinner.getSelectedItemPosition();
+                String modeSelected = position.toString();
                 Log.i("UI Interact", "Search Button Clicked!");
                 getUserJSON uTask = new getUserJSON();
                 String what = input.getText().toString();
                 if (what.matches("[\\w_\\-\\s\\[\\]]*?")){
-                    uTask.execute(input.getText().toString());
+                    uTask.execute(input.getText().toString(), modeSelected);
                 } else {
                     input.setAnimation(shakespeare);
                     textInputLayout.setError("Invalid character(s)!");
@@ -191,7 +195,7 @@ public class searchFragment extends Fragment{
         void onFragmentInteraction(Uri uri);
     }
 
-    public class getUserJSON extends AsyncTask<String, Integer, String> {
+    public class getUserJSON extends AsyncTask<String, Integer, String[]> {
 
         final Button searchButton = (Button)getView().findViewById(R.id.searchbtn);
         final ProgressBar pgBar = (ProgressBar)getView().findViewById(R.id.loadingBar);
@@ -209,13 +213,15 @@ public class searchFragment extends Fragment{
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
+            String[] returnPackage = {"", ""};
             if(!Objects.equals(params[0], "")){
                 Log.i("", "Start Fetching JSON...");
                 String token = getResources().getString(R.string.apikey);
                 String username = params[0];
+                String mode = params[1];
                 String url = "https://osu.ppy.sh/api/get_user";
-                String param = "k=" + token + "&u=" + username;
+                String param = "k=" + token + "&u=" + username + "&m=" + mode;
                 String json = "";
                 BufferedReader in = null;
                 try {
@@ -250,16 +256,18 @@ public class searchFragment extends Fragment{
                     }
                 }
                 json = json + "|" + params[0];
-                return json;
+                returnPackage[0] = json;
             } else {
-                return "empty";
+                returnPackage[0] = "empty";
             }
+            returnPackage[1] = params[1];
+            return returnPackage;
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(String[] s) {
             super.onPostExecute(s);
-            if(Objects.equals(s, "empty")){
+            if(Objects.equals(s[0], "empty")){
                 textInputLayout.setError("Please input username!");
                 editText.startAnimation(shake);
                 searchButton.setEnabled(true);
@@ -267,7 +275,7 @@ public class searchFragment extends Fragment{
             } else {
                 // All Log.i/e are Debug only and should be quoted in further implement.
                 // Log.i("", s);
-                String resultpackage[] = s.split("\\|");
+                String resultpackage[] = s[0].split("\\|");
                 String json = resultpackage[0];
                 String username = resultpackage[1];
 
@@ -315,7 +323,7 @@ public class searchFragment extends Fragment{
                         }
                         Log.i("", "Received info:");
                         Log.i("JSONData", re_username + re_playcount + re_pp + re_grank + re_crank);
-                        String[] parsedPackage = {re_username, re_pp, re_playcount, re_grank, re_crank, re_countss, re_counts, re_counta, re_totalscore, re_userid,re_usercountry};
+                        String[] parsedPackage = {re_username, re_pp, re_playcount, re_grank, re_crank, re_countss, re_counts, re_counta, re_totalscore, re_userid, re_usercountry, s[1]};
 
                         // Now open an activity of detail figures.
                         gotoDetail.putExtra("detailValue", parsedPackage);
